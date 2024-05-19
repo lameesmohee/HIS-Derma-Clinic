@@ -1,0 +1,291 @@
+.sideNav {
+    width: 100%;
+    height: 5vh;
+    background: linear-gradient(90deg, 
+                              rgba(0, 0, 0, 1) 15%,       /* Start with black */
+                              rgba(16, 131, 167, 60%) 50%, /* Mid gradient color */
+                              rgba(17, 135, 173, 1) 85%,  /* Intermediate color */
+                              rgba(0, 0, 0, 1) 100%); 
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center; /* Align items vertically */
+  justify-content:left;
+    /* margin: 20px; */
+    padding-right: 20px;
+    position: fixed;
+    z-index: 10000;
+  }
+  .logo{
+    height: 100%; /* Adjust height as needed */
+    object-fit: contain; /* Maintain aspect ratio */
+    /* background-color: aquamarine; */
+  }
+  .imagewelcome{
+    margin-bottom: -25px;
+  }
+  
+  .sideNav ul {
+    list-style-type: none;
+    /* padding: 0; */
+    display: flex;
+    /* margin: 0; */
+    
+  }
+  
+  .sideNav ul li {
+    /* margin-bottom: 50px; */
+    position: relative;
+    /* margin-left: 50px; */
+    margin-right:50px;
+    margin-top: -10px;
+    cursor: pointer;
+    
+  }
+  
+  .sideNav ul li a {
+    color: white;
+    text-decoration: none;
+    position: relative;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+.welcomeDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    
+}
+
+.welcomeDiv::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('facial.jpg');
+    background-size: cover;
+    background-position: bottom;
+    filter: blur(10px); /* Adjust the blur radius as needed */
+    z-index: -1;
+}
+  .welcomeDiv p{
+    font-family: 'Indie Flower', cursive;
+    font-size: 30px;
+    color:  #142632;;
+  }
+  .welcomeDiv h1{
+    /* font-family: 'Indie Flower', cursive; */
+    font-size: 50px;
+    color:  #142632;;
+  }
+  .welcomeDiv button{
+    margin:5px;
+    width:150px;
+    height:50px;
+    border-radius: 50px;
+    color: white;
+    background-color: #142632;
+    font-weight: bold;
+    font-size: 15px;
+    
+    transition: all 0.3s ease;
+  }
+  .welcomeDiv button a{
+    color: white;
+    text-decoration: none;
+  }
+  .welcomeDiv button a:hover {
+    color: #142632;
+}
+.welcomeDiv button:hover {
+    background-color: white;
+    color: #142632;
+}
+.about{
+    margin-top: -20px;
+    /* color: #142632; */
+    background-color: #142632;
+    color: white;
+    width:100%;
+    height:300px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    /* position: relative; */
+    transition: all 0.3s ease;
+}
+/* .about:hover{
+    background-color: #142632;
+    color: white;
+} */
+
+.about span{
+    height:2px;
+    width: 30px;
+}
+.container{
+    transform: translate(0,55%);
+}
+.about p{
+    font-size: 20px;
+    position: absolute;
+    width: 800px;
+    transform: translate(45%,0);
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+.services {
+  margin-top: 3rem;
+  margin-bottom: 5rem;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  align-self:center;
+  /* position: relative; */
+  /* z-index: 10; */
+}
+
+.serviceTitleContainer {
+  height: 10rem;
+}
+
+.servicesTitle {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.servicesLine {
+  display: block;
+  height: 0.5rem;
+  width: 5rem;
+  background-color: cornflowerblue;
+  margin: auto;
+  
+}
+
+.totalServices {
+  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1%;
+  width:80%;
+  justify-content: center;
+  justify-content: center; /* Center items horizontally */
+  margin: 0 auto; 
+  margin-top: -50px;
+  
+}
+
+.eachService {
+  /* flex: 0 0 calc(18% - 20px); */
+  
+  margin: 10px;
+  /* margin-top: -50px; */
+  width: 225px;
+  background: white;
+  padding: .4em;
+  border-radius: 6px;
+  text-align:center;
+  box-shadow: 0 0 20px 5px rgba(150, 147, 147, 0.5);
+  transition: all 0.3s ease;
+}
+.eachService:hover {
+  transform: scale(1.1); /* Increase the size when hovering */
+}
+.eachService .serviceImg {
+  background-color: rgb(236, 236, 236);
+  width: 100%;
+  height: 130px;
+  border-radius: 6px 6px 0 0;
+  
+  
+}
+.eachService .serviceName{
+  text-transform: uppercase;
+  font-size: 0.9em;
+  font-weight: 600;
+  color: rgb(63, 121, 230);
+  padding: 10px 7px 0;
+}
+.eachService .serviceDescription{
+  text-align:left;
+  font-weight: 500;
+  color: rgb(88, 87, 87);
+  padding: 7px;
+  height: 100px;
+}
+.bookBtn{
+  width:100px;
+  font-size: 15px;
+  font-weight: bold;
+  color:white;
+  text-align: center;
+  background-color: rgb(63, 121, 230);
+  border: 0px;
+  padding: 4px;
+  border-radius:4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  }
+  
+  .bookBtn:hover{
+  background-color: red;
+  font-weight:bold;
+  
+  }
+.doctors {
+  text-align: center;
+  margin-top: 3rem;
+  margin-bottom: 5rem;
+  /* position: relative; */
+  /* z-index: 10; */
+}
+
+.doctorsTitleContainer {
+  height: 10rem;
+}
+
+.doctorsTitle {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+
+}
+
+.totalDoctors {
+  text-align: center;
+  margin-top: -60px;
+}
+.eachDoctor {
+  /* background: skyblue; */
+  display: inline-block;
+  text-align: center;
+  width: 20rem;
+  height: 20rem;
+  /* margin-top: 5rem; */
+  /* border-radius: 50%; */
+  vertical-align: top;
+  margin: 2.5rem;
+  box-shadow: 0 0 10px rgba(20,38,50,255);
+  transition: transform 0.3s ease;
+}
+.eachDoctor:hover {
+  box-shadow: 0 0 20px rgba(0, 174, 255, 0.8); /* Adjust the values as desired */
+}
+.eachDoctor .doctorImg {
+  margin-top: 1rem;
+  width: 10rem;
+  height: 10rem;
+  /* border-radius: 50%; */
+}
+.doctorSpec{
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  /* font-size: 1.2rem; */
+}
