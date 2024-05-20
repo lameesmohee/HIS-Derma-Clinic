@@ -1,0 +1,76 @@
+.sideNav {
+    width: 100%;
+    height: 7vh;
+    background:  linear-gradient(90deg, rgba(252,252,252,0) 0%, rgba(172,239,255,1) 0%, rgba(17,135,173,1) 60%, rgba(58,73,127,1) 100%, rgba(30,142,158,0) 100%, rgba(83,94,155,0) 100%);
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: flex-end;
+    /* margin: 20px; */
+    padding-right: 20px;
+  }
+  
+  .sideNav ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    
+  }
+  
+  .sideNav ul li {
+    /* margin-bottom: 50px; */
+    position: relative;
+    /* margin-left: 50px; */
+    margin-right:50px;
+    margin-top: -15px;
+    cursor: pointer;
+    
+  }
+  
+  .sideNav ul li a {
+    color: white;
+    text-decoration: none;
+    position: relative;
+    transition: all 0.3s ease;
+  }
+  .trash {
+    color: red;
+    background: transparent;
+  }
+  .sideNav ul li a:hover {
+    /* color: #0070f3; */
+    color: white;
+    text-shadow: 0 0 5px rgba(255,255,255,0.6),
+                 0 0 10px rgba(255,255,255,0.6),
+                 0 0 15px rgba(255,255,255,0.6),
+                 0 0 20px rgba(255,255,255,0.6),
+                 0 0 25px rgba(255,255,255,0.6);
+    
+  }
+  .active {
+    border-bottom: 2px solid white; /* Change the color to match your design */
+    text-shadow: 0 0 5px rgba(255,255,255,0.6),
+                 0 0 10px rgba(255,255,255,0.6),
+                 0 0 15px rgba(255,255,255,0.6),
+                 0 0 20px rgba(255,255,255,0.6),
+                 0 0 25px rgba(255,255,255,0.6);
+  }
+  .imageDev{
+    /* background-color: red; */
+    height: 150px;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+
+  }
+  .imageDev img{
+    margin-top: -10px;
+    width:150px;
+    height: 150px;
+    border-radius: 100px;
+    background-color:rgba(58,73,127,1);
+    position: absolute;
+    transform: translate(-50%,25%);
+
+  }
+  
