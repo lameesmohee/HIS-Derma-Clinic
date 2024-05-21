@@ -31,17 +31,17 @@ useEffect(() => {
 
   const fetchData = async () => {
     try {
-      const result = await axios.get('https://jsonplaceholder.typicode.com/users', {headers:{token:token}});
-      const newRowData = result.data.map(doctor => ({
-        
-        name: doctor.Dname,
-        email: doctor.Demail,
-        specialization: doctor.Specialization,
-        phone:doctor.Dphone,
-        salary: doctor.DSalary,
-        address: doctor.Daddress,
-      }));
-      setData(newRowData);
+      const result = await axios.get(`http://localhost:8000/home/doctor/${id}`, {headers:{token:token}});
+      const doctor = result.data;
+        const newData = {
+          name: doctor.Dname,
+          email: doctor.Demail,
+          specialization: doctor.Specialization,
+          phone: doctor.Dphone,
+          salary: doctor.DSalary,
+          address: doctor.Daddress,
+        };
+        setData(newData);
       
       setLoading(false);
     } catch (error) {
@@ -59,19 +59,23 @@ useEffect(() => {
       <nav className={styles.sideNav}>
         <ul>
           <li>
-              <a className={styles.active}>Profile</a>
+            <a href='/doctorProfile' className={styles.active}>Profile</a>
           </li>
           <li>
-              <a href="/addPrescription">Add Prescription</a>
+            <a href="/showMedicalRecords">Medical Records</a>
           </li>
           <li>
-              <a href="/showAppointment">Appointments</a>
+            <a href='/addPrescription'>Add Prescription</a>
           </li>
+          <li>
+            <a href="/showAppointment">Appointments</a>
+          </li>
+          
         </ul>
       </nav>
       <div>
         <div className={styles.imageDev}>
-          <img src='/sofia.jpg'></img>
+          <img src='/doctor.jpg'></img>
         </div>
         <div className={styles.doctorDataContainer}>
         <ThemeProvider theme={defaultTheme}>
@@ -92,7 +96,7 @@ useEffect(() => {
                     <TextField
                       id="standard-read-only-input"
                       label="Name"
-                      defaultValue= ' '
+                      
                       value={data.name || ''}
                       InputProps={{
                         readOnly: true,
@@ -106,7 +110,7 @@ useEffect(() => {
                       id="standard-read-only-input"
                       label="Email"
                       value={data.email || ''}
-                      defaultValue="mohamedali@gmail.com"
+                      
                       InputProps={{
                         readOnly: true,
                       }}
@@ -118,7 +122,7 @@ useEffect(() => {
                     <TextField
                       id="standard-read-only-input"
                       label="Specialization"
-                      defaultValue="PhD. Pharmacy"
+                      
                       InputProps={{
                         readOnly: true,
                       }}
@@ -132,7 +136,7 @@ useEffect(() => {
                       id="standard-read-only-input"
                       label="Mobile Number"
                       value={data.phone || ''}
-                      defaultValue="01066965996"
+                      
                       InputProps={{
                         readOnly: true,
                       }}
@@ -145,7 +149,7 @@ useEffect(() => {
                       id="standard-read-only-input"
                       label="Salary"
                       value={data.salary || ''}
-                      defaultValue="5000"
+                      
                       InputProps={{
                         readOnly: true,
                       }}
@@ -157,7 +161,7 @@ useEffect(() => {
                     <TextField
                       id="standard-read-only-input"
                       label="Address"
-                      defaultValue="Cairo, Egypt"
+                      
                       value={data.address || ''}
                       InputProps={{
                         readOnly: true,

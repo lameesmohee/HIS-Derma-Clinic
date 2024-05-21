@@ -205,7 +205,7 @@ const AddEditNurse = () => {
       <nav className={styles.sideNav}>
         <ul>
           <li>
-            <a>Profile</a>
+            <a href='/adminProfile'>Profile</a>
           </li>
           <li>
             <a href='/addEditPatient'>Patients</a>
@@ -214,14 +214,15 @@ const AddEditNurse = () => {
             <a href='/addEditDoctor'>Doctors</a>
           </li>
           <li>
-            <a className={styles.active}>Nurses</a>
+            <a href='/addEditNurse'  className={styles.active}>Nurses</a>
           </li>
           <li>
             <a href='/addEditDevice'>Devices</a>
           </li>
           <li>
-              <a href='/adminBillings'>Payments</a>
+              <a href='/adminBillings'>Patients' Payments</a>
           </li>
+          
         </ul>
       </nav>
       <div>

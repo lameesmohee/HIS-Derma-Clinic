@@ -14,7 +14,7 @@ import styles from './page.module.css';
 
 const defaultTheme = createTheme();
 
-export default function DoctorProfile({ doctorData }) {
+export default function PatientProfile({ doctorData }) {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -31,16 +31,17 @@ export default function DoctorProfile({ doctorData }) {
 
     const fetchData = async () => {
       try {
-        const result = await axios.get('https://jsonplaceholder.typicode.com/users', { headers: { token: token } });
-        const newRowData = result.data.map(doctor => ({
-          name: doctor.Dname,
-          email: doctor.Demail,
-          specialization: doctor.Specialization,
-          phone: doctor.Dphone,
-          salary: doctor.DSalary,
-          address: doctor.Daddress,
-        }));
-        setData(newRowData[0]);  // Assuming you're fetching a single doctor for the profile
+        const result = await axios.get(`http://localhost:8000/home/patient/${id}`, { headers: { token: token }});
+        console.log(result.data);
+        const newRowData = {
+          name: result.data.Pname,
+          email: result.data.Pemail,
+          age: result.data.Page,
+          phone: result.data.Pphone,
+          sex: result.data.Psex,
+          address: result.data.Paddress
+        };
+        setData(newRowData);  // Assuming you're fetching a single doctor for the profile
         setLoading(false);
       } catch (error) {
         setError('Failed to fetch data');
@@ -56,8 +57,11 @@ export default function DoctorProfile({ doctorData }) {
     <div>
       <nav className={styles.sideNav}>
         <ul>
+        <li>
+            <a href="/">Home</a>
+          </li>
           <li>
-            <a className={styles.active}>Profile</a>
+            <a href="/patientProfile" className={styles.active}>Profile</a>
           </li>
           <li>
             <a href="/Prescription">Prescription</a>
@@ -65,11 +69,14 @@ export default function DoctorProfile({ doctorData }) {
           <li>
             <a href="/Appointment">Appointment</a>
           </li>
+          <li>
+            <a href="/patientBillings" >Payments</a>
+          </li>
         </ul>
       </nav>
       <div>
       <div className={styles.imageDev}>
-          <img src='/Patient2.jpg'></img>
+          <img src='/patient.jpg'></img>
         </div>
 
         <div className={styles.doctorDataContainer}>
@@ -114,7 +121,7 @@ export default function DoctorProfile({ doctorData }) {
                       <TextField
                         id="standard-read-only-input"
                         label="Age"
-                        value={data.specialization || ''}
+                        value={data.age || ''}
                         InputProps={{
                           readOnly: true,
                         }}
@@ -138,7 +145,7 @@ export default function DoctorProfile({ doctorData }) {
                       <TextField
                         id="standard-read-only-input"
                         label="Sex"
-                        value={data.salary || ''}
+                        value={data.sex || ''}
                         InputProps={{
                           readOnly: true,
                         }}

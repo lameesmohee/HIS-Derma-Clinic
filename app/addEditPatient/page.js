@@ -11,6 +11,7 @@ const AddEditPatient = () => {
   const [rows, setRows] = useState([{}]);
   const [token, setToken] = useState(null);
   const [id, setId] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const token = Cookies.get('token');
@@ -36,6 +37,7 @@ const AddEditPatient = () => {
         setRows(newRowData);
         console.log('Device', result.data)
       } catch (error) {
+        setError(error);
         console.log(error)
       }
     };

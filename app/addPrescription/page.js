@@ -1,6 +1,6 @@
-'use client'
-import { useState, useEffect } from 'react';
 
+
+'use client'
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -24,6 +24,10 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import styles from './page.module.css'
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { useState, useEffect } from 'react';
+import { TextareaAutosize } from '@mui/base/TextareaAutosize';
+
+
 
 
 
@@ -45,20 +49,22 @@ export default function AddPrescription() {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         try {
-          console.log(newRow)
-          const response = await axios.post(`http://localhost:8000/home/admin/${id}/doctors`, {
+          
+          const response = await axios.post(`http://localhost:8000/home/doctor/${id}/prescription`, {
             
-            medicineName: data.get('medicineName'),
-            dosage: data.get('dosage'),
-            sideEffects: data.get('sideEffects'),
-            contraindications: data.get('contraindications'),
-            disease: data.get('disease'),
-            email: data.get('email')
+            Nameofmedicine: data.get('medicineName'),
+            Dosage: data.get('dosage'),
+            contraindictions: data.get('contraindications'),
+            Disease: data.get('disease'),
+            notes: data.get('notes'),
+            doc_id:id,
+            pat_id:data.get('pat_id')
+
         }, {
           headers: {
             token: token
           }
-        });
+        }); console.log('Response: ', response);
         
       } catch (error) {
         console.error('Add failed:', error);
@@ -70,13 +76,16 @@ export default function AddPrescription() {
       <nav className={styles.sideNav}>
         <ul>
           <li>
-              <a href='/doctorProfile'>Profile</a>
+            <a href='/doctorProfile'>Profile</a>
           </li>
           <li>
-              <a className={styles.active}>Add Prescription</a>
+            <a href="/showMedicalRecords">Medical Records</a>
           </li>
           <li>
-              <a href="/showAppointment">Appointments</a>
+            <a href='/addPrescription' className={styles.active}>Add Prescription</a>
+          </li>
+          <li>
+            <a href="/showAppointment">Appointments</a>
           </li>
           
         </ul>
@@ -105,9 +114,9 @@ export default function AddPrescription() {
                     <TextField
                     required
                     fullWidth
-                    id="email"
-                    label="Patient Email"
-                    name="email"
+                    id="id"
+                    label="Patient ID"
+                    name="pat_id"
                     />
                 </Grid>
             <Grid item xs={12} >
@@ -146,20 +155,14 @@ export default function AddPrescription() {
                 <TextField
                   required
                   fullWidth
-                  name="sideEffects"
-                  label="Side Effects"
-                  id="sideEffects"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
                   name="contraindications"
                   label="Contraindications"
                   type="text"
                   id="contraindications"
                 />
+              </Grid>
+              <Grid item xs={12}>
+              <TextareaAutosize name="notes" aria-label="minimum height" minRows={5} placeholder="Add Notes" style={{ fontSize: '18px'}}/>
               </Grid>
               
             </Grid>

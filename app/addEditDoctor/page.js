@@ -8,6 +8,8 @@ import DoneIcon from '@mui/icons-material/Done';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import Cookies from 'js-cookie';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 const AddEditDoctor = () => {
   const [showForm, setShowForm] = useState(false);
@@ -28,7 +30,8 @@ const AddEditDoctor = () => {
   const [rows, setRows] = useState([{}]);
   const [token, setToken] = useState(null);
   const [id, setId] = useState(null);
-
+  const [error,setError] = useState(null)
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   useEffect(() => {
     const token = Cookies.get('token');
     const id = Cookies.get('id');
@@ -58,6 +61,7 @@ const AddEditDoctor = () => {
         console.log('Device', result.data)
 
       } catch (error) {
+        
         console.log(error)
       }
     };
@@ -86,7 +90,7 @@ const AddEditDoctor = () => {
     // Save the changes made by the user
     const row = rows[rowIndex];
     try {
-        console.log(row)
+        
         const response = await axios.put(`http://localhost:8000/home/admin/${id}/doctors`, {
           id: row.id,
           name: row.name,
@@ -95,7 +99,7 @@ const AddEditDoctor = () => {
           sex: row.sex,
           Salary: row.salary,
           email: row.email,
-          password: row.password,
+          
           phone:row.phone,
           address: row.address,
           dep_id: row.dep_id
@@ -104,15 +108,19 @@ const AddEditDoctor = () => {
               token: token  // Include the token in the headers for authentication
             }
           });
+          console.log("response",response)
           const updatedRows = rows.map((row, index) => {
             if (index === rowIndex) {
               return { ...row, isEditMode: false };
             }
             return row;
           });
+          
           setRows(updatedRows);
       console.log('Update successful:', response.data);
     } catch (error) {
+      setError(error.response.data.message)
+      setSnackbarOpen(true);
       console.error('Update failed:', error);
     }
   };
@@ -131,6 +139,9 @@ const AddEditDoctor = () => {
   const handleNewRowChange = (e) => {
     const { name, value } = e.target;
     setNewRow(prev => ({ ...prev, [name]: value }));
+  };
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
   };
 
   const handleAddRow = async() => {
@@ -174,6 +185,8 @@ const AddEditDoctor = () => {
   //   setRows([...rows, { ...otherData, isEditMode: false }]);
   } catch (error) {
     console.error('Add failed:', error);
+    setError(error.response.data.message)
+      setSnackbarOpen(true);
   }
     setShowForm(false);
     setRows([...rows, { ...newRow, isEditMode: false }]);
@@ -224,7 +237,7 @@ const AddEditDoctor = () => {
       <nav className={styles.sideNav}>
         <ul>
           <li>
-            <a>Profile</a>
+            <a href='/adminProfile'>Profile</a>
           </li>
           <li>
             <a href='/addEditPatient'>Patients</a>
@@ -239,8 +252,9 @@ const AddEditDoctor = () => {
             <a href='/addEditDevice'>Devices</a>
           </li>
           <li>
-              <a href='/adminBillings'>Payments</a>
+              <a href='/adminBillings'>Patients' Payments</a>
           </li>
+          
         </ul>
       </nav>
       <div>
@@ -312,6 +326,13 @@ const AddEditDoctor = () => {
           {showForm && <button onClick={handleAddRow}>Submit</button>}
         </div>
       </div>
+      
+      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+        <Alert onClose={handleSnackbarClose} severity="error" sx={{ width: '100%' }}>
+          {error}
+        </Alert>
+      </Snackbar>
+  
     </div>
   );
 };

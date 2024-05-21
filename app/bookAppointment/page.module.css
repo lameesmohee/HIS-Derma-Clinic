@@ -106,6 +106,7 @@
     box-shadow: 0 0 20px 5px rgba(150, 147, 147, 0.5);
     border-radius: 25px;
     overflow: hidden;
+    margin-bottom: 50px;
     
 }
 .doctorImage{
@@ -149,11 +150,12 @@
 .appointmentContainer{
     text-align: center;
     background-color: white;
-    width:5rem;
-    height:12.5rem;
+    width:5.5rem;
+    height:11.4rem;
     border: 1px solid black;
     border-radius: 5px;
     overflow: hidden;
+    
 
     
 }
@@ -169,6 +171,8 @@
     cursor: pointer;
     color: white;
     font-weight: bold;
+    margin-bottom: -10px;
+    /* padding-bottom: 0px; */
 }
 .feeIcon{
     margin-bottom: -6.5px;

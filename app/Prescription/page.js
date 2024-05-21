@@ -22,54 +22,65 @@ const defaultTheme = createTheme();
 export default function AddPrescription() {
   const [token, setToken] = useState(null);
   const [id, setId] = useState(null);
+  const [data, setData] = useState(null);
 
   useEffect(() => {
     const token = Cookies.get('token');
     const id = Cookies.get('id');
     setToken(token);
     setId(id);
+
+    const fetchData = async () => {
+      try {
+        console.log('here')
+        const response = await axios.get(`http://localhost:8000/home/patient/${id}/prescription`, {
+          headers: {
+            token: token
+          }
+        });
+        console.log(response.data);
+
+        const prescription = {
+          medicineName: response.data.prescripition_instance.Nameofmedicine,
+          dosage: response.data.prescripition_instance.Dosage,
+          Dname: response.data.Dname,
+          contraindications: response.data.prescripition_instance.contraindictions,
+          disease: response.data.prescripition_instance.Disease
+        }
+        setData(prescription);
+      } catch (error) {
+        console.error('Add failed:', error);
+      }
+    };
+    fetchData();
   }, []);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    try {
-      console.log(newRow);
-      const response = await axios.post(`http://localhost:8000/home/admin/${id}/doctors`, {
-        medicineName: data.get('medicineName'),
-        dosage: data.get('dosage'),
-        sideEffects: data.get('sideEffects'),
-        contraindications: data.get('contraindications'),
-        disease: data.get('disease'),
-        email: data.get('email')
-      }, {
-        headers: {
-          token: token
-        }
-      });
-
-    } catch (error) {
-      console.error('Add failed:', error);
-    }
-  };
+  // if (!data) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <div>
       <nav className={styles.sideNav}>
         <ul>
-          <li>
-            <a href='/patientProfile'>Profile</a>
+        <li>
+            <a href="/">Home</a>
           </li>
           <li>
-            <a className={styles.active}>Prescription</a>
+            <a href="/patientProfile" >Profile</a>
+          </li>
+          <li>
+            <a href="/Prescription" className={styles.active}>Prescription</a>
           </li>
           <li>
             <a href="/Appointment">Appointment</a>
           </li>
+          <li>
+            <a href="/patientBillings" >Payments</a>
+          </li>
         </ul>
       </nav>
-
-      <ThemeProvider theme={defaultTheme}>
+      {data ? (<ThemeProvider theme={defaultTheme}>
         <Container component="main" maxWidth="xs">
           <CssBaseline />
           <Box
@@ -86,13 +97,13 @@ export default function AddPrescription() {
             <Typography component="h1" variant="h5">
               Your Prescription
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+            <Box component="form" noValidate sx={{ mt: 3 }}>
               <Grid container spacing={2}>
-
                 <Grid item xs={12}>
                   <TextField
                     required
                     fullWidth
+                    value={data.disease}
                     id="disease"
                     label="Disease Description"
                     name="disease"
@@ -105,6 +116,7 @@ export default function AddPrescription() {
                   <TextField
                     required
                     fullWidth
+                    value={data.medicineName}
                     id="medicineName"
                     label="Medicine Name"
                     name="medicineName"
@@ -118,6 +130,7 @@ export default function AddPrescription() {
                   <TextField
                     required
                     fullWidth
+                    value={data.dosage}
                     id="dosage"
                     label="Dosage"
                     name="dosage"
@@ -130,9 +143,10 @@ export default function AddPrescription() {
                   <TextField
                     required
                     fullWidth
-                    id="sideEffects"
-                    label="Side Effects"
-                    name="sideEffects"
+                    value={data.Dname}
+                    id="Dname"
+                    label="Doctor's Name"
+                    name="Dname"
                     InputProps={{
                       readOnly: true,
                     }}
@@ -142,29 +156,22 @@ export default function AddPrescription() {
                   <TextField
                     required
                     fullWidth
-                    id="contradictions"
-                    label="Contradictions"
-                    name="contradictions"
+                    value={data.contraindications}
+                    id="contraindications"
+                    label="Contraindications"
+                    name="contraindications"
                     InputProps={{
                       readOnly: true,
                     }}
                   />
                 </Grid>
               </Grid>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Submit
-              </Button>
-              <Grid container justifyContent="flex-end">
-              </Grid>
+              <Grid container justifyContent="flex-end"></Grid>
             </Box>
           </Box>
         </Container>
-      </ThemeProvider>
+      </ThemeProvider>):(<p className={styles.emptyAppointments}>No Prescriptions</p>)}
+      
     </div>
   );
 }

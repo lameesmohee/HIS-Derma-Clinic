@@ -42,10 +42,6 @@
     color: red;
     background: transparent;
   }
-  .comboBox{
-    display: flex;
-    flex-direction: row;
-  }
   .sideNav ul li a:hover {
     /* color: #0070f3; */
     color: white;
@@ -64,6 +60,24 @@
                  0 0 20px rgba(255,255,255,0.6),
                  0 0 25px rgba(255,255,255,0.6);
   }
+  .comboBox{
+    display: flex;
+    flex-direction: row;
+  }
+  .patientDataContainer{
+    width:100%;
+    /* background-color: aqua; */
+  }
+  .name{
+    text-align: center;
+    font-size: 30px;
+  }
+  .patientData{
+    text-align: center;
+    
+  }
+
+
   .appointmentAndService{
     padding: 2%;
     display: flex;
@@ -86,8 +100,8 @@
     width: 500px;
     padding: 20px;
     border-radius: 10px;
-    border: 1px solid rgb(132, 132, 132);
-    box-shadow: 0 0 20px 5px rgba(150, 147, 147, 0.5);
+    border: 0px solid rgb(172, 172, 172);
+    box-shadow: 0 0 20px 5px rgba(207, 206, 206, 0.5);
   }
   .appointmentContainer h3{
     text-align: center;

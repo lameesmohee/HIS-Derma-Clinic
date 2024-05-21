@@ -2,14 +2,63 @@
 import styles from "./page.module.css"
 import Image from 'next/image';
 import React, { useRef } from 'react';
-
+import axios from 'axios';
+import Cookies from "js-cookie";
+import { useState, useEffect } from 'react';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
     const servicesRef = useRef(null);
     const aboutRef = useRef(null);
     const doctorRef = useRef(null);
+    const [token, setToken] = useState(null);
+    const [id, setId] = useState(null);
+    const router = useRouter();
+    
+    
+    useEffect(() => {
+        const token = Cookies.get('token');
+        const id = Cookies.get('id');
+        setToken(token);
+        setId(id);});
+    
     const scrollToSection = (ref) => {
         ref.current.scrollIntoView({ behavior: 'smooth' ,top:100});
+    }
+    const bookService = async (serviceName) =>{
+        
+        try {
+            console.log('inside try',id,token)
+            if (!id || !token) {
+                console.error('ID or Token not available');
+                return;
+              }
+          
+          const response = await axios.post(`http://localhost:8000/home/patient/${id}/services`, {
+            
+            service: serviceName
+        
+        }, {
+          headers: {
+            token: token
+          }
+        }); 
+        console.log('Response: ', response);
+        
+      } catch (error) {
+        console.error('Add failed:', error);
+      }
+
+    }
+    const handleLogOut = () =>{
+        setToken(null);
+        setId(null);
+        Cookies.remove('token');
+        Cookies.remove('id');
+        router.push("/");
+
     }
   return (
     <main >
@@ -20,17 +69,31 @@ export default function Home() {
               <a onClick={() => scrollToSection(aboutRef)}>About</a>
           </li>
           <li>
-              <a onClick={() => scrollToSection(servicesRef)}>Survices</a>
+              <a onClick={() => scrollToSection(servicesRef)}>Services</a>
           </li>
-          <li>
+          {token && <li>
               <a href="./bookAppointment">Book An Appointment</a>
-          </li>
+          </li>}
           <li>
               <a onClick={() => scrollToSection(doctorRef)}>Doctors</a>
           </li>
           <li>
               <a>Contact Us</a>
           </li>
+          {token && (
+                        <li>
+                            <a href="/patientProfile">
+                                <AccountCircleIcon />
+                            </a>
+                        </li>
+                    )}
+            {token && (
+                        <li>
+                            <a onClick={handleLogOut}>
+                                <LogoutIcon />
+                            </a>
+                        </li>
+                    )}
           
         </ul>
       </nav>
@@ -38,8 +101,8 @@ export default function Home() {
         <h1>Welcome To <Image className = {styles.imagewelcome} src="/glowup.png"  width={400} height={80}/></h1>
         <p>Your Skin Matters</p>
         <div>
-          <button> <a href="./login">Login</a></button>
-          <button><a href="./signup">Sign Up</a></button>
+          {!token && <button> <a href="./login">Login</a></button>}
+          {!token && <button><a href="./signup">Sign Up</a></button>}
         </div>
       </div>
       <div className={styles.about} ref={aboutRef}>
@@ -63,44 +126,61 @@ export default function Home() {
                     
                     <div className={styles.eachService}>
                         <img src="/MEDICAL-DERMATOLOGY.jpg" className={styles.serviceImg} ></img>
-                        <h3 className={styles.serviceName}>Medical Dermatology</h3>
+                        <h3 className={styles.serviceName}>Treatment of hyperpigmentation and melasma</h3>
                         <p className={styles.serviceDescription}>We diagnose and treat a range of skin conditions such as acne, eczema, psoriasis, rosacea, dermatitis, skin infections, and more.</p>
-                        <button className={styles.bookBtn}>Book</button>
+                        {token && <button className={styles.bookBtn} onClick={()=>bookService("Treatment of hyperpigmentation and melasma")}>Book</button>}
                     </div>
 
                     <div className={styles.eachService}>
                         <img src='/botoxt.webp' className={styles.serviceImg} ></img>
-                        <h3 className={styles.serviceName}> Laser hair removal </h3>
+                        <h3 className={styles.serviceName}>Laser hair removal</h3>
                         <p className={styles.serviceDescription}> Safe and effective hair removal using laser technology to target hair follicles, providing long-lasting results.</p>
-                        <button className={styles.bookBtn}>Book</button>
+                        {token &&<button className={styles.bookBtn} onClick={()=>bookService("Laser hair removal")}>Book</button>}
                     </div>
-                    
+                    {/* botox */}
                     <div className={styles.eachService}>
                         <img src='/botoxt.webp' className={styles.serviceImg} ></img>
-                        <h3 className={styles.serviceName}>Botox and Dermal Fillers</h3>
+                        <h3 className={styles.serviceName}>Botox injections for wrinkle reduction</h3>
                         <p className={styles.serviceDescription}>Minimally invasive procedures to reduce wrinkles, fine lines, and restore volume to areas of the face, such as lips and cheeks.</p>
-                        <button className={styles.bookBtn}>Book</button>
+                        {token && <button className={styles.bookBtn} onClick={()=>bookService("Botox injections for wrinkle reduction")}>Book</button>}
                     </div>
-
                     <div className={styles.eachService}>
                         <img src="/treatment.png" className={styles.serviceImg} ></img>
-                        <h3 className={styles.serviceName}>Facial Treatments</h3>
+                        <h3 className={styles.serviceName}>Dermal fillers for volume restoration</h3>
                         <p className={styles.serviceDescription}>Customized facials and skin treatments tailored to address specific concerns, such as hydration, brightening, or anti-aging.</p>
-                        <button className={styles.bookBtn}>Book</button>
+                        {token && <button className={styles.bookBtn} onClick={()=>bookService("Dermal fillers for volume restoration")}>Book</button>}
+                    </div>
+                    <div className={styles.eachService}>
+                        <img src="/treatment.png" className={styles.serviceImg} ></img>
+                        <h3 className={styles.serviceName}>Chemical peels for skin rejuvenation</h3>
+                        <p className={styles.serviceDescription}>Customized facials and skin treatments tailored to address specific concerns, such as hydration, brightening, or anti-aging.</p>
+                        {token && <button className={styles.bookBtn} onClick={()=>bookService("Chemical peels for skin rejuvenation")}>Book</button>}
+                    </div>
+                    <div className={styles.eachService}>
+                        <img src="/treatment.png" className={styles.serviceImg} ></img>
+                        <h3 className={styles.serviceName}>Microdermabrasion for exfoliation and skin texture improvement</h3>
+                        <p className={styles.serviceDescription}>Customized facials and skin treatments tailored to address specific concerns, such as hydration, brightening, or anti-aging.</p>
+                        {token && <button className={styles.bookBtn} onClick={()=>bookService("Microdermabrasion for exfoliation and skin texture improvement")}>Book</button>}
+                    </div>
+                    <div className={styles.eachService}>
+                        <img src="/treatment.png" className={styles.serviceImg} ></img>
+                        <h3 className={styles.serviceName}>Laser skin resurfacing for acne scars and wrinkles</h3>
+                        <p className={styles.serviceDescription}>Customized facials and skin treatments tailored to address specific concerns, such as hydration, brightening, or anti-aging.</p>
+                        {token && <button className={styles.bookBtn} onClick={()=>bookService("Laser skin resurfacing for acne scars and wrinkles")}>Book</button>}
                     </div>
 
                     <div className={styles.eachService}>
                         <img src="/hair.jpg" className={styles.serviceImg} ></img>
-                        <h3 className={styles.serviceName}>Hair and Nail Disorders</h3>
+                        <h3 className={styles.serviceName}>Treatment of facial redness and veins</h3>
                         <p className={styles.serviceDescription}>We diagnose and treat various hair and nail conditions, including hair loss (alopecia), scalp infections, nail infections, and nail disorders.</p>
-                        <button className={styles.bookBtn}>Book</button>
+                        {token && <button className={styles.bookBtn} onClick={()=>bookService("Treatment of facial redness and veins")}>Book</button>}
                     </div>
 
                     <div className={styles.eachService}>
                         <img src="/surgical.webp" className={styles.serviceImg} ></img>
-                        <h3 className={styles.serviceName}>Dermatologic Surgery</h3>
+                        <h3 className={styles.serviceName}>Non-surgical body contouring procedures</h3>
                         <p className={styles.serviceDescription}>Our skilled dermatologic surgeons perform various surgical procedures, including mole removal, skin biopsies, skin cancer excisions.</p>
-                        <button className={styles.bookBtn}>Book</button>
+                        {token && <button className={styles.bookBtn} onClick={()=>bookService("Non-surgical body contouring procedures")}>Book</button>}
                     </div>
                 </div>
         </div>

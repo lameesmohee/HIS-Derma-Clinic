@@ -19,16 +19,31 @@ import { setAuthData } from './authData';
 import { redirect } from 'next/navigation'
 import { useRouter } from 'next/navigation';
 import { useHistory } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import styles from './page.module.css';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
 // import Router from 'next/router';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
-// export let token = {}
-// export let id = 0;
+
 export default function SignIn() {
+  const [person,setPerson] = useState(null)
   const router = useRouter();
+  const [emailMessage , setEmailMessage] = useState(null)
+  const [passwordMessage, setPasswordMessage] = useState(null)
+
+  const clearErrorMessages = () => {
+    setTimeout(() => {
+      setEmailMessage(null);
+      setPasswordMessage(null);
+    }, 9000); // Clear error messages after 3 seconds
+  };
 
   const handleSubmit = async (event) => {
     
@@ -39,7 +54,7 @@ export default function SignIn() {
     const postData = {
       email: data.get('email'),
       password: data.get('password'),
-      person_type:'admin'
+      person_type:person
     };
     console.log(postData);
 
@@ -51,13 +66,27 @@ export default function SignIn() {
       const id = response.data._id;
       Cookies.set('token', token);
       Cookies.set('id', id);
-      // setAuthData(token, id)
-      // router.push({ pathname:"/addEditDevice", query:{token, id}});
-      router.push("/addEditDevice");
-     
+      if(person === 'patient'){
+        router.push("/")
+      }else if(person === 'admin'){
+        router.push("/adminProfile")
+      }else if(person === 'doctor'){
+        router.push("/doctorProfile")
+      }
+      ;
     } catch (error) {
+      if(error.response.data.email_message){
+        setEmailMessage(error.response.data.email_message)
+      }else if(error.response.data.password_message){
+        
+        setPasswordMessage(error.response.data.password_message)
+      }
+      clearErrorMessages();
       console.error('Error:', error); 
     }
+  };
+  const handlePerson = (event) => {
+    setPerson(event.target.value);
   };
 
   return (
@@ -80,26 +109,59 @@ export default function SignIn() {
             Sign in
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
+          {emailMessage ? (
+              <TextField
+                error
+                fullWidth
+                id="outlined-error-helper-text"
+                label="Error"
+                defaultValue="Hello World"
+                helperText={emailMessage}
+              />
+            ) : (
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                  autoFocus
+                />)}
+               {passwordMessage ? (
+              <TextField
+                error
+                fullWidth
+                id="outlined-error-helper-text"
+                label="Error"
+                defaultValue="Hello World"
+                helperText={passwordMessage}
+              />
+            ) :(<TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                />
+              
+            )}
+            <FormLabel id="demo-controlled-radio-buttons-group" className={styles.labels}>Who are you?</FormLabel>
+            <RadioGroup
+              aria-labelledby="demo-controlled-radio-buttons-group"
+              name="controlled-radio-buttons-group"
+              value={person}
+              onChange={handlePerson}
+              style={{ display: 'flex', flexDirection: 'row', textAlign:'center' }}
+            >
+              <FormControlLabel value="admin" control={<Radio />} label="Admin" />
+              <FormControlLabel value="patient" control={<Radio />} label="Patient" />
+              <FormControlLabel value="doctor" control={<Radio />} label="Doctor" />
+            </RadioGroup>
             <Button
               type="submit"
               fullWidth

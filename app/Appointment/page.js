@@ -14,6 +14,7 @@ import styles from './page.module.css'
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
+import Cookies from 'js-cookie';
 
 const defaultTheme = createTheme();
 
@@ -23,66 +24,94 @@ export default function DoctorProfile({doctorData}){
 const [appointments, setAppointment] = useState([{}]);
 const [loading, setLoading] = useState(true);
 const [error, setError] = useState(null);
+const [token, setToken] = useState(null);
+  const [id, setId] = useState(null);
 
 useEffect(() => {
-  const fetchData = async () => {
+    const token = Cookies.get('token');
+    const id = Cookies.get('id');
+    setToken(token);
+    setId(id);
+    const fetchData = async () => {
+        try {
+          const result = await axios.get(`http://localhost:8000/home/patient/${id}/appointment`, { headers: { token: token }});
+          console.log(result.data);
+          const appointment_data = result.data.map(appointment => ({
+            doc_name: appointment.Dname,
+            fees: appointment.appointment_instance.fees,
+            day: appointment.appointment_instance.Time.Day,
+            start: appointment.appointment_instance.Time.start,
+            end: appointment.appointment_instance.Time.end,
+            doc_id: appointment.appointment_instance.doc_id
+          }));
+          setAppointment(appointment_data);
+          setLoading(false);
+        } catch (error) {
+          setError(error);
+          setLoading(false);
+          console.log(error);
+        }
+      };
+  
+      fetchData();
+    }, []);
+const handleCancelAppointment = async (docId) => {
     try {
-      const result = await axios.get('https://jsonplaceholder.typicode.com/users');
-         
-      const doc_data = result.data;
-      setAppointment(doc_data.slice(0, 2));
-      console.log(data);
-      setLoading(false);
-    } catch (error) {
-      setError('Failed to fetch data');
-      setLoading(false);
-      console.log(error)
-    }
-  };
+        // console.log(rows[rowIndex])
+        const response = await axios.delete(`http://localhost:8000/home/patient/${id}/appointment`, {
+            headers: {
+              token: token
+            },
+            data: {
+              doc_id: docId
+            }
+          });
+      console.log('Delete successful:', response.data);
 
-  fetchData();
-}, []);
-const handleCancelAppointment = async (appointmentId) => {
-    try {
-      await axios.post('https://your-api-endpoint/cancel', { id: appointmentId });
-      setAppointment(appointments.filter(appointment => appointment.patientID !== appointmentId));
+      
     } catch (error) {
-      console.log('Failed to cancel appointment', error);
+      console.error('Delete failed:', error);
     }
   };
 
     return(
         <div>
         <nav className={styles.sideNav}>
-            <ul>
-                <li>
-                    <Link href='/patientProfile'>Profile</Link>
-                </li>
-                <li>
-                    <Link href="/Prescription">Prescription</Link>
-                </li>
-                <li>
-                    <Link href="/Appointment" className={styles.active}>Appointment</Link>
-                </li>
-            </ul>
-        </nav>
+        <ul>
+        <li>
+            <a href="/">Home</a>
+          </li>
+          <li>
+            <a href="/patientProfile" >Profile</a>
+          </li>
+          <li>
+            <a href="/Prescription">Prescription</a>
+          </li>
+          <li>
+            <a href="/Appointment"  className={styles.active}>Appointment</a>
+          </li>
+          <li>
+            <a href="/patientBillings" >Payments</a>
+          </li>
+        </ul>
+      </nav>
         
         {appointments.length > 0 ? (
             <div className={styles.cardContainer}>
                 {appointments.map((appointment) => (
-                    <div className={styles.card} key={appointment.patientID}>
+                    <div className={styles.card} key={appointment.doc_id}>
                         <div className={styles.cardDetails}>
                             <div className={styles.timeDetails}>
-                                <p className={styles.textTitle}>Start Time: <span className={styles.patientName}>{appointment.startTime}</span></p>
-                                <p className={styles.textTitle}>End Time: <span className={styles.patientName}>{appointment.endTime}</span></p>
+                                <p className={styles.textTitle}>Start Time: <span className={styles.patientName}>{appointment.start}</span></p>
+                                <p className={styles.textTitle}>End Time: <span className={styles.patientName}>{appointment.end}</span></p>
                             </div>
                             <div className={styles.patientInfo}>
-                                <p className={styles.textBody}>Doctor Name: <span>{appointment.patientName}</span></p>
-                                <p className={styles.textBody}>ID: <span>{appointment.patientID}</span></p>
-                                <p className={styles.textBody}>Day: <span>{appointment.patientID}</span></p>
+                                <p className={styles.textBody}>Doctor Name: <span>{appointment.doc_name}</span></p>
+                                <p className={styles.textBody}>Day: <span>{appointment.day}</span></p>
+                                <p className={styles.textBody}>Fees: <span>{appointment.fees}</span></p>
                             </div>
                         </div>
-                        <a className={styles.cardButton} onClick={() => handleCancelAppointment(appointment.patientID)}>Cancel Appointment</a>
+                        <a className={styles.cardButton} onClick={() => handleCancelAppointment(appointment.doc_id)}>Cancel Appointment</a>
                     </div>
                 ))}
             </div>

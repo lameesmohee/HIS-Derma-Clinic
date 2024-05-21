@@ -31,16 +31,18 @@ export default function DoctorProfile({ doctorData }) {
 
     const fetchData = async () => {
       try {
-        const result = await axios.get('https://jsonplaceholder.typicode.com/users', { headers: { token: token } });
-        const newRowData = result.data.map(doctor => ({
-          name: doctor.Dname,
-          email: doctor.Demail,
-          specialization: doctor.Specialization,
-          phone: doctor.Dphone,
-          salary: doctor.DSalary,
-          address: doctor.Daddress,
-        }));
-        setData(newRowData[0]);  // Assuming you're fetching a single doctor for the profile
+        const result = await axios.get(`http://localhost:8000/home/admin/${id}`, { headers: { token: token } });
+        const newRowData = {
+          id: result.data._id,
+          name: result.data.Aname,
+          email: result.data.Aemail,
+          sex: result.data.Asex,
+          phone: result.data.Aphone,
+          salary: result.data.ASalary,
+          address: result.data.Aaddress,
+          age: result.data.Aage
+        }
+        setData(newRowData);  // Assuming you're fetching a single doctor for the profile
         setLoading(false);
       } catch (error) {
         setError('Failed to fetch data');
@@ -72,14 +74,24 @@ export default function DoctorProfile({ doctorData }) {
       <nav className={styles.sideNav}>
         <ul>
           <li>
-            <a className={styles.active}>Profile</a>
+            <a href='/adminProfile' className={styles.active}>Profile</a>
           </li>
           <li>
-            <a href="/addPrescription">Add Prescription</a>
+            <a href='/addEditPatient'>Patients</a>
           </li>
           <li>
-            <a href="/showAppointment">Appointments</a>
+            <a href='/addEditDoctor' >Doctors</a>
           </li>
+          <li>
+            <a href='/addEditNurse'>Nurses</a>
+          </li>
+          <li>
+            <a href='/addEditDevice'>Devices</a>
+          </li>
+          <li>
+              <a href='/adminBillings'>Patients' Payments</a>
+          </li>
+          
         </ul>
       </nav>
       <div>
@@ -102,10 +114,32 @@ export default function DoctorProfile({ doctorData }) {
                 <Box component="form" noValidate sx={{ mt: 3 }}>
                   <Grid container spacing={2}>
                     <Grid item xs={12} sm={6}>
+                        <TextField
+                          id="standard-read-only-input"
+                          label="Admin ID"
+                          value={data.id || ''}
+                          InputProps={{
+                            readOnly: true,
+                          }}
+                          variant="standard"
+                        />
+                      </Grid>
+                    <Grid item xs={12} sm={6}>
                       <TextField
                         id="standard-read-only-input"
                         label="Name"
                         value={data.name || ''}
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                        variant="standard"
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        id="standard-read-only-input"
+                        label="Sex"
+                        value={data.sex || ''}
                         InputProps={{
                           readOnly: true,
                         }}
@@ -125,17 +159,7 @@ export default function DoctorProfile({ doctorData }) {
                       />
                     </Grid>
 
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        id="standard-read-only-input"
-                        label="Admin ID"
-                        value={data.specialization || ''}
-                        InputProps={{
-                          readOnly: true,
-                        }}
-                        variant="standard"
-                      />
-                    </Grid>
+                    
 
                     <Grid item xs={12} sm={6}>
                       <TextField
@@ -152,7 +176,7 @@ export default function DoctorProfile({ doctorData }) {
                     <Grid item xs={12} sm={6}>
                       <TextField
                         id="standard-read-only-input"
-                        label="Age"
+                        label="Salary"
                         value={data.salary || ''}
                         InputProps={{
                           readOnly: true,

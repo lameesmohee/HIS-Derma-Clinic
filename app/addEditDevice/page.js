@@ -17,6 +17,7 @@ const AddEditDevice = () => {
   const [id, setId] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [newRow, setNewRow] = useState({
+    id:'',
     Code: '',
     Manufacturer: '',
     PPM: '',
@@ -71,7 +72,7 @@ const AddEditDevice = () => {
     try {
         console.log(row)
         const response = await axios.put(`http://localhost:8000/home/admin/${id}/devices`, {
-            id: row._id,  // Ensure the ID is included in the request body
+            id: row.id,  // Ensure the ID is included in the request body
             // Code: row.Code,
             PPM: row.PPM,
             Manufacturer: row.Manufacturer,
@@ -110,6 +111,7 @@ const AddEditDevice = () => {
     try {
         console.log(newRow)
       const response = await axios.post(`http://localhost:8000/home/admin/${id}/devices`, {
+        
         Code: newRow.Code,
         Manufacturer: newRow.Manufacturer,
         PPM: newRow.PPM,
@@ -176,23 +178,24 @@ const AddEditDevice = () => {
       <nav className={styles.sideNav}>
         <ul>
           <li>
-              <a>Profile</a>
+            <a href='/adminProfile'>Profile</a>
           </li>
           <li>
-              <a href='/addEditPatient'>Patients</a>
+            <a href='/addEditPatient'>Patients</a>
           </li>
           <li>
-              <a href='/addEditDoctor'>Doctors</a>
+            <a href='/addEditDoctor' >Doctors</a>
           </li>
           <li>
-              <a href='/addEditNurse'>Nurses</a>
+            <a href='/addEditNurse'>Nurses</a>
           </li>
           <li>
-              <a className={styles.active}>Devices</a>
+            <a href='/addEditDevice' className={styles.active}>Devices</a>
           </li>
           <li>
-              <a href='/adminBillings'>Payments</a>
+              <a href='/adminBillings'>Patients' Payments</a>
           </li>
+          
         </ul>
       </nav>
       <div>
