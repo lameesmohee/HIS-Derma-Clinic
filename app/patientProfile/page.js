@@ -20,7 +20,7 @@ export default function DoctorProfile({ doctorData }) {
   const [error, setError] = useState(null);
   const [token, setToken] = useState(null);
   const [id, setId] = useState(null);
-  const [profilePicture, setProfilePicture] = useState('/Patient.jpg');
+  const [profilePicture, setProfilePicture] = useState('/Patient1.jpg');
   const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
@@ -52,21 +52,6 @@ export default function DoctorProfile({ doctorData }) {
     fetchData();
   }, []);
 
-  const handleImageClick = () => {
-    document.getElementById('fileInput').click();
-  };
-
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedFile(file);
-
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setProfilePicture(reader.result);
-    };
-    reader.readAsDataURL(file);
-  };
-
   return (
     <div>
       <nav className={styles.sideNav}>
@@ -75,29 +60,18 @@ export default function DoctorProfile({ doctorData }) {
             <a className={styles.active}>Profile</a>
           </li>
           <li>
-            <a href="/addPrescription">Add Prescription</a>
+            <a href="/Prescription">Prescription</a>
           </li>
           <li>
-            <a href="/showAppointment">Appointments</a>
+            <a href="/Appointment">Appointment</a>
           </li>
         </ul>
       </nav>
       <div>
-        <div className={styles.imageDev}>
-          <img 
-            src={profilePicture} 
-            alt="Profile" 
-            className={styles.profileImage} 
-            onClick={handleImageClick}
-          />
-          <input
-            type="file"
-            id="fileInput"
-            style={{ display: 'none' }}
-            accept="image/*"
-            onChange={handleFileChange}
-          />
+      <div className={styles.imageDev}>
+          <img src='/Patient2.jpg'></img>
         </div>
+
         <div className={styles.doctorDataContainer}>
           <ThemeProvider theme={defaultTheme}>
             <Container component="main" maxWidth="xs">

@@ -20,7 +20,7 @@ export default function DoctorProfile({ doctorData }) {
   const [error, setError] = useState(null);
   const [token, setToken] = useState(null);
   const [id, setId] = useState(null);
-  const [profilePicture, setProfilePicture] = useState('/Patient.jpg');
+  const [profilePicture, setProfilePicture] = useState('/Admin.jpg');
   const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
@@ -83,21 +83,10 @@ export default function DoctorProfile({ doctorData }) {
         </ul>
       </nav>
       <div>
-        <div className={styles.imageDev}>
-          <img 
-            src={profilePicture} 
-            alt="Profile" 
-            className={styles.profileImage} 
-            onClick={handleImageClick}
-          />
-          <input
-            type="file"
-            id="fileInput"
-            style={{ display: 'none' }}
-            accept="image/*"
-            onChange={handleFileChange}
-          />
+      <div className={styles.imageDev}>
+          <img src='/admin.jpg'></img>
         </div>
+
         <div className={styles.doctorDataContainer}>
           <ThemeProvider theme={defaultTheme}>
             <Container component="main" maxWidth="xs">
