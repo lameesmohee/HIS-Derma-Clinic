@@ -6,7 +6,11 @@ This project is the frontend for the Glow Up Clinic, a dermatology clinic websit
 
 ## Video Demo
 
-[Watch the video demo of the Glow Up Clinic website](https://github.com/lameesmohee/HIS-Derma-Clinic/blob/main/demo/GlowUp%20Dermatology%20Clinic.mp4)
+
+https://github.com/lameesmohee/HIS-Derma-Clinic/assets/104171516/49b4e564-3e50-4630-ab37-28bb0a3325aa
+
+
+
 
 ## Features
 
