@@ -134,6 +134,3 @@ https://github.com/lameesmohee/HIS-Derma-Clinic/assets/104171516/49b4e564-3e50-4
 
 This frontend application for the Glow Up Clinic provides a comprehensive user experience for different roles within the clinic, ensuring secure access and efficient management of clinic operations. The integration with an Express.js backend enables smooth data flow and functionality.
 
----
-
-Feel free to modify this README file to better suit your project's specifics or to add any additional setup steps and details as necessary.
