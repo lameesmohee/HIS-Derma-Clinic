@@ -1,14 +1,16 @@
-'use client'
+'use client';
 import styles from './page.module.css';
 import React, { useState, useEffect } from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import axios from 'axios';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import DoneIcon from '@mui/icons-material/Done';
 import IconButton from '@mui/material/IconButton';
 import Cookies from 'js-cookie';
 
 const AddEditPatient = () => {
-  const [rows, setRows] = useState([{}]);
+  const [rows, setRows] = useState([]);
   const [token, setToken] = useState(null);
   const [id, setId] = useState(null);
   const [error, setError] = useState(null);
@@ -18,52 +20,105 @@ const AddEditPatient = () => {
     const id = Cookies.get('id');
     setToken(token);
     setId(id);
-    console.log('token in device', token)
     const fetchData = async () => {
       try {
-        console.log(id)
-        const result = await axios.get(`http://localhost:8000/home/admin/${id}/patients`, { headers: { token: token } });
+        const result = await axios.get(`http://localhost:8000/home/admin/${id}/patients`, {
+          headers: { token: token },
+        });
         const newRowData = result.data.map(patient => ({
           id: patient._id,
-          name: patient.Pname,
-          age: patient.Page,
-          sex: patient.Psex,
-          email: patient.Pemail,
-          password: patient.Ppassword,
-          phone: patient.Pphone,
-          address: patient.Paddress,
+          Fname: patient.firstName,
+          Lname: patient.lastName,
+          sex: patient.gender,
+          dateofbirth: patient.dateOfBirth.split('T')[0],
+          email: patient.email,
+          phone: patient.phone,
+          street: patient.address.street,
+          city: patient.address.city,
+          state: patient.address.state,
+          isEditMode: false, // Add this property to track edit mode
         }));
 
         setRows(newRowData);
-        console.log('Device', result.data)
       } catch (error) {
         setError(error);
-        console.log(error)
       }
     };
 
     fetchData();
   }, []);
 
-  const handleDeleteRow = async (rowIndex) => {
-    const rowId = rows[rowIndex].id; // Assuming each row has a unique 'id' field
-    console.log('row data', rowId)
-    console.log('rowId type:', typeof rowId);
+  const handleEdit = rowIndex => {
+    const updatedRows = rows.map((row, index) => {
+      if (index === rowIndex) {
+        return { ...row, isEditMode: true };
+      }
+      return row;
+    });
+    setRows(updatedRows);
+  };
 
-    // Delete request
+  const handleSave = async rowIndex => {
+    const row = rows[rowIndex];
+    console.log(row)
+    try {
+      const response = await axios.put(
+        `http://localhost:8000/home/admin/${id}/patients`,
+        {
+          id: row.id,
+          firstName: row.Fname,
+          lastName: row.Lname,
+          dateofbirth: row.dateofbirth,
+          gender: row.sex,
+          email: row.email,
+          phone: row.phone,
+          address:{
+            street: row.street,
+            city: row.city,
+            state:row.state
+          }
+        },
+        {
+          headers: {
+            token: token,
+          },
+        }
+      );
+
+      const updatedRows = rows.map((row, index) => {
+        if (index === rowIndex) {
+          return { ...row, isEditMode: false };
+        }
+        return row;
+      });
+
+      setRows(updatedRows);
+      console.log('Update successful:', response.data);
+    } catch (error) {
+      console.error('Update failed:', error);
+    }
+  };
+
+  const handleChange = (e, rowIndex, field) => {
+    const { value } = e.target;
+    const updatedRows = rows.map((row, index) => {
+      if (index === rowIndex) {
+        return { ...row, [field]: value };
+      }
+      return row;
+    });
+    setRows(updatedRows);
+  };
+
+  const handleDeleteRow = async rowIndex => {
+    const rowId = rows[rowIndex].id;
     try {
       const response = await axios.delete(`http://localhost:8000/home/admin/${id}/patients`, {
-        headers: {
-          token: token
-        },
-        data: {
-          id: rowId
-        }
+        headers: { token: token },
+        data: { id: rowId },
       });
-      console.log('Delete successful:', response.data);
-
-      // Remove the row from the state
       setRows(rows.filter((_, index) => index !== rowIndex));
+      console.log('Delete successful:', response.data);
     } catch (error) {
       console.error('Delete failed:', error);
     }
@@ -89,7 +144,7 @@ const AddEditPatient = () => {
             <a href='/addEditDevice'>Devices</a>
           </li>
           <li>
-              <a href='/adminBillings'>Payments</a>
+            <a href='/adminBillings'>Payments</a>
           </li>
         </ul>
       </nav>
@@ -98,24 +153,49 @@ const AddEditPatient = () => {
           <thead>
             <tr>
               <th>ID</th>
-              <th>Name</th>
-              <th>Age</th>
-              <th>Sex</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Gender</th>
+              <th>Date Of Birth</th>
               <th>Email</th>
-              <th>Password</th>
               <th>Phone</th>
-              <th>Address</th>
-              <th></th>
+              <th>Street</th>
+              <th>City</th>
+              <th>State</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {rows.map((row, rowIndex) => (
               <tr key={rowIndex}>
-                {Object.keys(row).map((key) => (
-                  <td key={key}>{row[key]}</td>
-                ))}
+                <td>{row.id}</td> {/* Render the ID column */}
+                {Object.keys(row).map(key => {
+                  if (key === 'id' || key === 'isEditMode') return null;
+                  return (
+                    <td key={key}>
+                      {row.isEditMode ? (
+                        <input
+                          type='text'
+                          value={row[key]}
+                          onChange={e => handleChange(e, rowIndex, key)}
+                        />
+                      ) : (
+                        row[key]
+                      )}
+                    </td>
+                  );
+                })}
                 <td>
-                  <IconButton onClick={() => handleDeleteRow(rowIndex)} className={styles.trash}>
+                  {row.isEditMode ? (
+                    <IconButton onClick={() => handleSave(rowIndex)}>
+                      <DoneIcon style={{ color: 'green' }} />
+                    </IconButton>
+                  ) : (
+                    <IconButton onClick={() => handleEdit(rowIndex)}>
+                      <EditIcon style={{ color: 'blue' }} />
+                    </IconButton>
+                  )}
+                  <IconButton onClick={() => handleDeleteRow(rowIndex)}>
                     <DeleteIcon style={{ color: 'red' }} />
                   </IconButton>
                 </td>

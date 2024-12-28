@@ -57,7 +57,7 @@ export default function AvailableDoctors() {
           doc_specialization: appointment.DoctorSpecialization,
           fees: appointment.Fees.fees,
           times: appointment.availableSlots,
-          doc_id: appointment.doc_id
+          doc_id: appointment.docid
         }));
         setAppointment(appointment_data);
         setLoading(false);

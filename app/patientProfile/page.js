@@ -34,12 +34,15 @@ export default function PatientProfile({ doctorData }) {
         const result = await axios.get(`http://localhost:8000/home/patient/${id}`, { headers: { token: token }});
         console.log(result.data);
         const newRowData = {
-          name: result.data.Pname,
-          email: result.data.Pemail,
-          age: result.data.Page,
-          phone: result.data.Pphone,
-          sex: result.data.Psex,
-          address: result.data.Paddress
+          Fname: result.data.firstName,
+          Lname: result.data.lastName,
+          email: result.data.email,
+          phone: result.data.phone,
+          sex: result.data.gender,
+          street: result.data.address.street,
+          city: result.data.address.city,
+          state: result.data.address.state,
+          dateofbirth: result.data.dateofbirth
         };
         setData(newRowData);  // Assuming you're fetching a single doctor for the profile
         setLoading(false);
@@ -96,8 +99,19 @@ export default function PatientProfile({ doctorData }) {
                     <Grid item xs={12} sm={6}>
                       <TextField
                         id="standard-read-only-input"
-                        label="Name"
-                        value={data.name || ''}
+                        label="First Name"
+                        value={data.Fname || ''}
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                        variant="standard"
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        id="standard-read-only-input"
+                        label="Last Name"
+                        value={data.Lname || ''}
                         InputProps={{
                           readOnly: true,
                         }}
@@ -120,8 +134,8 @@ export default function PatientProfile({ doctorData }) {
                     <Grid item xs={12} sm={6}>
                       <TextField
                         id="standard-read-only-input"
-                        label="Age"
-                        value={data.age || ''}
+                        label="Date Of Birth"
+                        value={data.dateofbirth || ''}
                         InputProps={{
                           readOnly: true,
                         }}
@@ -156,8 +170,30 @@ export default function PatientProfile({ doctorData }) {
                     <Grid item xs={12} sm={6}>
                       <TextField
                         id="standard-read-only-input"
-                        label="Address"
-                        value={data.address || ''}
+                        label="Street"
+                        value={data.street || ''}
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                        variant="standard"
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        id="standard-read-only-input"
+                        label="City"
+                        value={data.city || ''}
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                        variant="standard"
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        id="standard-read-only-input"
+                        label="State"
+                        value={data.state || ''}
                         InputProps={{
                           readOnly: true,
                         }}
