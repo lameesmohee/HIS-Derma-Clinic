@@ -45,8 +45,13 @@ export default function AddPrescription() {
           dosage: response.data.prescripition_instance.Dosage,
           Dname: response.data.Dname,
           contraindications: response.data.prescripition_instance.contraindictions,
-          disease: response.data.prescripition_instance.Disease
-        }
+          disease: response.data.prescripition_instance.Disease,
+          duration: response.data.prescripition_instance.Duration,
+          frequency: response.data.prescripition_instance.Frequency,
+          pharmacy: response.data.prescripition_instance.PharmacyName,
+          route: response.data.prescripition_instance.Route,
+          quantity: response.data.prescripition_instance.Quantity
+        };
         setData(prescription);
       } catch (error) {
         console.error('Add failed:', error);
@@ -55,15 +60,11 @@ export default function AddPrescription() {
     fetchData();
   }, []);
 
-  // if (!data) {
-  //   return <div>Loading...</div>;
-  // }
-
   return (
     <div>
       <nav className={styles.sideNav}>
         <ul>
-        <li>
+          <li>
             <a href="/">Home</a>
           </li>
           <li>
@@ -80,98 +81,166 @@ export default function AddPrescription() {
           </li>
         </ul>
       </nav>
-      {data ? (<ThemeProvider theme={defaultTheme}>
-        <Container component="main" maxWidth="xs">
-          <CssBaseline />
-          <Box
-            sx={{
-              marginTop: 2,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <Avatar sx={{ bgcolor: green[500], marginBottom: 2 }}>
-              <AssignmentIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-              Your Prescription
-            </Typography>
-            <Box component="form" noValidate sx={{ mt: 3 }}>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    value={data.disease}
-                    id="disease"
-                    label="Disease Description"
-                    name="disease"
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
+      {data ? (
+        <ThemeProvider theme={defaultTheme}>
+          <Container component="main" maxWidth="lg"> {/* Set the maxWidth to 'lg' */}
+            <CssBaseline />
+            <Box
+              sx={{
+                marginTop: 2,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <Avatar sx={{ bgcolor: green[500], marginBottom: 2 }}>
+                <AssignmentIcon />
+              </Avatar>
+              <Typography component="h1" variant="h5">
+                Your Prescription
+              </Typography>
+              <Box component="form" noValidate sx={{ mt: 3 }}>
+                <Grid container spacing={3}> {/* Adjust spacing between the fields */}
+                  {/* Each field will take up half the width on medium screens and above, full width on small screens */}
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      required
+                      fullWidth
+                      value={data.disease}
+                      id="disease"
+                      label="Disease Description"
+                      name="disease"
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      required
+                      fullWidth
+                      value={data.medicineName}
+                      id="medicineName"
+                      label="Medicine Name"
+                      name="medicineName"
+                      autoFocus
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      required
+                      fullWidth
+                      value={data.dosage}
+                      id="dosage"
+                      label="Dosage"
+                      name="dosage"
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      required
+                      fullWidth
+                      value={data.Dname}
+                      id="Dname"
+                      label="Doctor's Name"
+                      name="Dname"
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      required
+                      fullWidth
+                      value={data.contraindications}
+                      id="contraindications"
+                      label="Contraindications"
+                      name="contraindications"
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      required
+                      fullWidth
+                      value={data.duration}
+                      id="duration"
+                      label="Duration"
+                      name="duration"
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      required
+                      fullWidth
+                      value={data.frequency}
+                      id="frequency"
+                      label="Frequency"
+                      name="frequency"
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      required
+                      fullWidth
+                      value={data.pharmacy}
+                      id="pharmacy"
+                      label="Pharmacy"
+                      name="pharmacy"
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      required
+                      fullWidth
+                      value={data.route}
+                      id="route"
+                      label="Route"
+                      name="route"
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      required
+                      fullWidth
+                      value={data.quantity}
+                      id="quantity"
+                      label="Quantity"
+                      name="quantity"
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    value={data.medicineName}
-                    id="medicineName"
-                    label="Medicine Name"
-                    name="medicineName"
-                    autoFocus
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    value={data.dosage}
-                    id="dosage"
-                    label="Dosage"
-                    name="dosage"
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    value={data.Dname}
-                    id="Dname"
-                    label="Doctor's Name"
-                    name="Dname"
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    value={data.contraindications}
-                    id="contraindications"
-                    label="Contraindications"
-                    name="contraindications"
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </Grid>
-              </Grid>
-              <Grid container justifyContent="flex-end"></Grid>
+              </Box>
             </Box>
-          </Box>
-        </Container>
-      </ThemeProvider>):(<p className={styles.emptyAppointments}>No Prescriptions</p>)}
-      
+          </Container>
+        </ThemeProvider>
+      ) : (
+        <p className={styles.emptyAppointments}>No Prescriptions</p>
+      )}
     </div>
   );
 }
